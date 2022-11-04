@@ -1850,7 +1850,7 @@ int main (int arg,char*argv[]){
 int fn_verificarRango(char*ptr){
     int value = atoi(ptr);
     if(value < -32768 || value > 32767){
-        printf("Error: variable fuera de rango: %s". yytext);
+        printf("Error: variable fuera de rango: %s", yytext);
         return yyerror();
     }
     return 0;
