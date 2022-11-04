@@ -1,6 +1,6 @@
 DECVAR
-contador, calcula_cuadrado: Integer;+
-promedio: Float
+contador, calcula_cuadrado: Integer;
+promedio: Float;
 actual, suma: Float;
 ENNDEC
     write "Hola mundo!"
