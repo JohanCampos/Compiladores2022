@@ -6,6 +6,7 @@ from Token import Token
 if __name__ == '__main__':
     Buffer = Buffer()
     Analizador = AnalizadorLexico()
+    token = Token()
 
     # Lista de cada lista devuelta por la función tokenize
     token = []
@@ -16,7 +17,6 @@ if __name__ == '__main__':
     # Obtenemos los tokens y recargams el buffer
     for i in Buffer.load_buffer():
         token = Analizador.tokenize(i)
-        print(token)
         
         """token += t
         lexema += lex

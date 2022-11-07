@@ -1,5 +1,5 @@
 import re
-
+from Token import Token
 
 class AnalizadorLexico:
     # Fila del Token
@@ -15,6 +15,8 @@ class AnalizadorLexico:
             ('ELSE', r'else'),          # else
             ('WHILE', r'while'),        # while
             ('FOR', r'for'),            # for
+            ('STRUCT', r'struct'),      # struct
+            ('INCLUDE', r'#include'),   # include
             ('READ', r'read'),          # read
             ('PRINT', r'print'),        # print
             ('PARENTESIS_APERTURA', r'\('),        # (
@@ -30,6 +32,7 @@ class AnalizadorLexico:
             ('OR', r'\|\|'),            # ||
             ('AND', r'&&'),             # &&
             ('ATTR', r'\='),            # =
+            ('INCLUDE_CONST',r'\<[a-zA-Z]\w*\.[c-h]\>'), #INCLUDE
             ('MAYOR', r'<'),               # <
             ('MENOR', r'>'),               # >
             ('MAS', r'\+'),            # +
@@ -42,18 +45,13 @@ class AnalizadorLexico:
             ('CHAR_CONST', r'\'[a-zA-Z]\''),        #CHAR
             ('NEWLINE', r'\n'),         # SALTO DE LINEA
             ('SKIP', r'[ \t]+'),        # ESPACIO and TABULADOR
-            ('MISMATCH', r'.'),         # CUALQUIER OTRO CARACTER
+            ('MISMATCH', r'°'),         # CUALQUIER OTRO CARACTER
         ]
 
         #Unimos los tokens para hacer la busqueda con el renglon del buffer leido
         tokens_join = '|'.join('(?P<%s>%s)' % x for x in reglas)
         lin_start = 0
-
-        # Lista de la salida del programa
-        token = []
-        lexema = []
-        fila = []
-        columna = []
+        token = Token()
 
         # Analiza la linea para identificar el lexema y su respectivo Token
         for m in re.finditer(tokens_join, code):
@@ -69,13 +67,8 @@ class AnalizadorLexico:
                 raise RuntimeError('%r inesperado en línea %d' % (token_lexema, self.lin_num))
             else:
                     col = m.start() - lin_start
-                    columna.append(col)
-                    token.append(token_tipo)
-                    lexema.append(token_lexema)
-                    fila.append(self.lin_num)
-                    # Imprimimos la información del Token
-                    print('Token = {0}, Lexema = \'{1}\', Fila = {2}, Columna = {3}'.format(token_tipo, token_lexema, self.lin_num, col))
+                    token.setAtributos(token_tipo,token_lexema,self.lin_num,col)
+                    token.__str__()
 
-        mi_token = Token(token, lexema, fila, columna)
-        return mi_token
+        return token
         #return token, lexema, fila, columna
