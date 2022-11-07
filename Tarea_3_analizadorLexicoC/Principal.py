@@ -1,6 +1,7 @@
 
 from Buffer import Buffer
 from AnalizadorLexico import AnalizadorLexico
+from Token import Token
 
 if __name__ == '__main__':
     Buffer = Buffer()
@@ -14,11 +15,13 @@ if __name__ == '__main__':
 
     # Obtenemos los tokens y recargams el buffer
     for i in Buffer.load_buffer():
-        t, lex, lin, col = Analizador.tokenize(i)
-        token += t
+        token = Analizador.tokenize(i)
+        print(token)
+        
+        """token += t
         lexema += lex
         fila += lin
         columna += col
-
-    print('\nTokens reconocidos: ', token)
+        """
+    ##print('\nTokens reconocidos: ', token)
 

@@ -2,6 +2,8 @@ int main()
 {
     float a;
     a = 1.1;
+    char i;
+    i = 'a'
     int i, inc, j;
     i = 0;
     inc = 2;

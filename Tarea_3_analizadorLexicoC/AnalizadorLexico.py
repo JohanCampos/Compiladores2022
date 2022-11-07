@@ -10,9 +10,11 @@ class AnalizadorLexico:
             ('MAIN', r'main'),          # main
             ('INT', r'int'),            # int
             ('FLOAT', r'float'),        # float
+            ('CHAR', r'char'),          # char
             ('IF', r'if'),              # if
             ('ELSE', r'else'),          # else
             ('WHILE', r'while'),        # while
+            ('FOR', r'for'),            # for
             ('READ', r'read'),          # read
             ('PRINT', r'print'),        # print
             ('PARENTESIS_APERTURA', r'\('),        # (
@@ -37,12 +39,13 @@ class AnalizadorLexico:
             ('ID', r'[a-zA-Z]\w*'),     # IDENTIFICADORES
             ('FLOAT_CONST', r'\d(\d)*\.\d(\d)*'),   # FLOAT
             ('INTEGER_CONST', r'\d(\d)*'),          # INT
+            ('CHAR_CONST', r'\'[a-zA-Z]\''),        #CHAR
             ('NEWLINE', r'\n'),         # SALTO DE LINEA
             ('SKIP', r'[ \t]+'),        # ESPACIO and TABULADOR
             ('MISMATCH', r'.'),         # CUALQUIER OTRO CARACTER
         ]
 
-        #Unimos los tokens para mostrar al final de la ejecución
+        #Unimos los tokens para hacer la busqueda con el renglon del buffer leido
         tokens_join = '|'.join('(?P<%s>%s)' % x for x in reglas)
         lin_start = 0
 
@@ -73,4 +76,6 @@ class AnalizadorLexico:
                     # Imprimimos la información del Token
                     print('Token = {0}, Lexema = \'{1}\', Fila = {2}, Columna = {3}'.format(token_tipo, token_lexema, self.lin_num, col))
 
-        return token, lexema, fila, columna
+        mi_token = Token(token, lexema, fila, columna)
+        return mi_token
+        #return token, lexema, fila, columna
