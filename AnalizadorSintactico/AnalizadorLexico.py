@@ -54,7 +54,7 @@ class AnalizadorLexico:
         #Unimos los tokens para hacer la busqueda con el renglon del buffer leido
         tokens_join = '|'.join('(?P<%s>%s)' % x for x in reglas)
         lin_start = 0
-        token = Token()
+        tokens = []
 
         # Analiza la linea para identificar el lexema y su respectivo Token
         for m in re.finditer(tokens_join, code):
@@ -68,9 +68,12 @@ class AnalizadorLexico:
             elif token_tipo == 'MISMATCH':
                 raise RuntimeError('%r inesperado en línea %d' % (token_lexema, self.lin_num))
             else:
+                    token = Token()
                     col = m.start() - lin_start
                     token.setAtributos(token_tipo,token_lexema,self.lin_num,col)
                     token.__str__()
+                    tokens.append(token)
 
-        return token
+        return tokens
+
         #return token, lexema, fila, columna

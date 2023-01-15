@@ -1,5 +1,5 @@
 
-int numero = 5;
+int numero;
 
 int main()
 {
