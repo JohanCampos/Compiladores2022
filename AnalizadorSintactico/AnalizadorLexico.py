@@ -73,6 +73,11 @@ class AnalizadorLexico:
                     token.setAtributos(token_tipo,token_lexema,self.lin_num,col)
                     token.__str__()
                     tokens.append(token)
+        
+        token = Token()
+        token.setNombreToken('FIN_PROGRAMA')
+        token.__str__()
+        tokens.append(token)
 
         return tokens
 

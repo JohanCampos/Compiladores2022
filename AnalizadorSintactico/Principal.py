@@ -3,13 +3,15 @@ from Buffer import Buffer
 from AnalizadorLexico import AnalizadorLexico
 from Token import Token
 
+# avance = -1 Estado de error, debe estar la primera funcion como void, para identificar entre variables y funciones
+
 def VarDecInit(avance):
         return avance
 
     # numero]
 def ArrayDecl(avance, token):
     terminal = token[avance].getNombreToken()
-    if terminal == 'INTEGER_CONST' or terminal == 'FLOAT_CONST':
+    if terminal == 'INTEGER_CONST':
         avance = avance + 1
         terminal = token[avance].getNombreToken()
         if terminal == 'CORCHETE_CERRADURA':
@@ -24,12 +26,10 @@ def Type(avance):
 
 def Stmt(avance, token):
     terminal = token[avance].getNombreToken()
-    if terminal == 'PARENTESIS_APERTURA':
+    if terminal == 'LLAVE_APERTURA':
         avance = avance + 1
         terminal = token[avance].getNombreToken()
-        if terminal == 'PARENTESIS_CERRADURA': 
-            avance = avance + 1
-            terminal = token[avance].getNombreToken()
+        if terminal == 'LLAVE_CERRADURA': 
             return avance + 1
         else:
             return -1
@@ -39,17 +39,14 @@ def Stmt(avance, token):
 # varnames
 def DecList(avance, token):
     terminal = token[avance].getNombreToken()
-    
-    if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR':
-        avance = avance +1
+    if terminal == 'ID':
         avance = Varnames(avance, token)
         return avance
     else:
-        return -1
+        return avance
 
 def Varnames(avance, token):
     terminal = token[avance].getNombreToken()
-
     if terminal == 'ID':
         avance = avance + 1
         terminal = token[avance].getNombreToken()
@@ -71,6 +68,7 @@ def Varnames(avance, token):
             avance = DecList(avance, token)
             if avance == -1:
                 return avance
+            return avance    
         
         terminal = token[avance].getNombreToken()
         if terminal == 'PUNTOCOMA':
@@ -89,13 +87,13 @@ def VarsDecList(avance, token):
     terminal = token[avance].getNombreToken()
     if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR':
         avance = VarDecList(avance, token)
-        VarsDecList(avance, token)
+        return VarsDecList(avance, token)
     else:
         return avance
 
 def Vars(avance, token):
     terminal = token[avance].getNombreToken()
-
+    
     if terminal == 'CORCHETE_APERTURA':
         avance = avance + 1
         avance = ArrayDecl(avance, token)
@@ -111,16 +109,58 @@ def Vars(avance, token):
     elif terminal == 'COMA':
         avance = avance + 1
         avance = DecList(avance, token)
-
+        return avance
+    
     terminal = token[avance].getNombreToken()
     if terminal == 'PUNTOCOMA':
         return avance + 1
     else:
         return -1
 
+def Param(avance, token):
+    terminal = token[avance].getNombreToken()
+    if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR':
+        avance = avance + 1 
+        terminal = token[avance].getNombreToken()
+        if terminal == 'ID':
+            return avance + 1
+        else:
+            return -1
+    else:
+        return -1
+def ParamsPrima(avance, token):
+    terminal = token[avance].getNombreToken()
+    if terminal == 'COMA':
+        avance = avance + 1
+        avance = Param(avance, token)
+        if avance == -1:
+            return avance
+        terminal = token[avance].getNombreToken()
+        if terminal == 'COMA':
+            avance = ParamsPrima(avance, token)
+        else:
+            return avance 
+    else:
+        return avance
+
+def Params(avance, token):
+    terminal = token[avance].getNombreToken()
+    if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR':
+        avance = Param(avance, token)
+        if avance == -1:
+            return avance
+        terminal = token[avance].getNombreToken()
+        if terminal == 'COMA':
+            avance = ParamsPrima(avance, token)
+            return avance
+        else:
+            return avance
+    else:
+        return avance
+
 def FuncName(avance, token):
     terminal = token[avance].getNombreToken()
-    if terminal == 'ID':
+    if terminal == 'ID' or terminal == 'MAIN':
         avance = avance + 1
         terminal = token[avance].getNombreToken()
         if terminal == 'PARENTESIS_APERTURA':
@@ -130,10 +170,13 @@ def FuncName(avance, token):
                 return avance
             terminal = token[avance].getNombreToken()
             if terminal == 'PARENTESIS_CERRADURA':
+                avance = avance + 1
                 avance = Stmt(avance, token)
                 return avance
             else:
                 return -1
+        else:
+            return -1
 
 def FuncDecList(avance, token):
     terminal = token[avance].getNombreToken()
@@ -148,43 +191,6 @@ def FuncDecList(avance, token):
     else:
         return -1
 
-def Param(avance, token):
-    terminal = token[avance].getNombreToken()
-    if terminal == 'ID':
-        return avance + 1
-    else:
-        return -1
-
-def ParamsPrima(avance, token):
-    terminal = token[avance].getNombreToken()
-    if terminal == 'COMA':
-        avance = avance + 1
-        avance = Param(avance, token)
-        if avance == -1:
-            return avance
-        terminal = token[avance].getNombreToken()
-        if terminal == 'COMA':
-            avance = ParamsPrima(avance, token)
-        else:
-            return avance 
-    else:
-        return -1
-
-def Params(avance, token):
-    terminal = token[avance].getNombreToken()
-    if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR':
-        avance = Param(avance, token)
-        if avance == -1:
-            return avance
-        terminal = token[avance].getNombreToken()
-        if terminal == 'COMA':
-            avance = ParamsPrima(avance, token)
-            return avance
-        else:
-            return -1
-    else:
-        return -1
-
 def FuncDecListPrima(avance, token):
     terminal = token[avance].getNombreToken()
     if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR' or terminal == 'VOID':
@@ -196,11 +202,11 @@ def FuncDecListPrima(avance, token):
             avance = FuncDecListPrima(avance, token)
             return avance
     else:
-        return -1
+        return avance
 
 def FuncsDecList(avance, token):
     terminal = token[avance].getNombreToken()
-    if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR':
+    if terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR' or terminal == 'VOID':
         avance = FuncDecList(avance, token)
         avance = FuncDecListPrima(avance, token)
         return avance
@@ -209,15 +215,14 @@ def FuncsDecList(avance, token):
 
 def Decl(avance, token):
     terminal = token[avance].getNombreToken()
-    if terminal == 'CORCHETE_APERTURA' or terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR' or terminal == 'COMA':
+    if terminal == 'CORCHETE_APERTURA' or terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR' or terminal == 'COMA' or terminal == 'ATTR' or terminal == 'PUNTOCOMA':
         avance = Vars(avance, token)
         if avance == -1:
             return avance
         avance = VarsDecList(avance, token)
         if avance == -1:
-            return 
+            return -1
         avance = FuncsDecList(avance, token)
-        
         return avance
     else:
         return -1
@@ -248,14 +253,14 @@ def program (avance, token):
             return -1
         avance = avance + 1
         terminal = token[avance].getNombreToken()
-        if terminal == 'CORCHETE_APERTURA' or terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR' or terminal == 'COMA':
+        if terminal == 'CORCHETE_APERTURA' or terminal == 'INT' or terminal == 'FLOAT' or terminal == 'CHAR' or terminal == 'COMA' or terminal == 'ATTR' or terminal == 'PUNTOCOMA':
             return Decl(avance,token)
         else:
             return -1
     elif terminal == 'VOID':
         avance = avance + 1
         terminal = token[avance].getNombreToken()
-        if terminal != 'ID':
+        if terminal != 'MAIN':
             return -1
         avance = avance + 1
         terminal = token[avance].getNombreToken()

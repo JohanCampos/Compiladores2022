@@ -1,6 +1,6 @@
 class Buffer:
     def load_buffer(self):
-        arq = open('C://Users//Johan//Documents//GitHub//Compiladores2022//Tarea_3_analizadorLexicoC//program.c', 'r')
+        arq = open('C://Users//Johan//Documents//GitHub//Compiladores2022//AnalizadorSintactico//program.c', 'r')
         text = arq.readline()
 
         buffer = []
