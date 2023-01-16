@@ -20,6 +20,7 @@ class AnalizadorLexico:
             ('INCLUDE', r'#include'),   # include
             ('READ', r'read'),          # read
             ('PRINT', r'print'),        # print
+            ('RETURN', r'return'),        # return
             ('PARENTESIS_APERTURA', r'\('),        # (
             ('PARENTESIS_CERRADURA', r'\)'),        # )
             ('CORCHETE_APERTURA', r'\['),        # (
