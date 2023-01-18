@@ -301,6 +301,8 @@ if __name__ == '__main__':
         columna += col
         """
     
-    inicial(token)
+    conclusion = inicial(token)
+    if conclusion != -1:
+        print('La sintaxis es correcta.')
     ##print('\nTokens reconocidos: ', token)
 

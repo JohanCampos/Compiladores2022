@@ -7,7 +7,6 @@ class AnalizadorLexico:
 
     def tokenize(self, code):
         reglas = [
-            ('MAIN', r'main'),          # main
             ('VOID', r'void'),          # void
             ('INT', r'int'),            # int
             ('BOOLEAN', r'bool'),       # boolean
@@ -78,11 +77,6 @@ class AnalizadorLexico:
                     token.setAtributos(token_tipo,token_lexema,self.lin_num,col)
                     token.__str__()
                     tokens.append(token)
-        
-        token = Token()
-        token.setNombreToken('FIN_PROGRAMA')
-        token.__str__()
-        tokens.append(token)
 
         return tokens
 
