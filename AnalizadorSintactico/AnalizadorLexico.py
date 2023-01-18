@@ -10,6 +10,7 @@ class AnalizadorLexico:
             ('MAIN', r'main'),          # main
             ('VOID', r'void'),          # void
             ('INT', r'int'),            # int
+            ('BOOLEAN', r'bool'),       # boolean
             ('FLOAT', r'float'),        # float
             ('CHAR', r'char'),          # char
             ('IF', r'if'),              # if
@@ -31,6 +32,7 @@ class AnalizadorLexico:
             ('PUNTOCOMA', r';'),           # ;
             ('IGUAL', r'=='),              # ==
             ('NOIGUAL', r'!='),              # !=
+            ('NEGATION', r'!'),              # !
             ('MAYORIGUAL', r'<='),              # <=
             ('MENORIGUAL', r'>='),              # >=
             ('OR', r'\|\|'),            # ||
@@ -47,6 +49,8 @@ class AnalizadorLexico:
             ('FLOAT_CONST', r'\d(\d)*\.\d(\d)*'),   # FLOAT
             ('INTEGER_CONST', r'\d(\d)*'),          # INT
             ('CHAR_CONST', r'\'[a-zA-Z]\''),        #CHAR
+            ('TRUE', r'true'),               # TRUE
+            ('FALSE', r'false'),          # FALSE
             ('NEWLINE', r'\n'),         # SALTO DE LINEA
             ('SKIP', r'[ \t]+'),        # ESPACIO and TABULADOR
             ('MISMATCH', r'°'),         # CUALQUIER OTRO CARACTER
